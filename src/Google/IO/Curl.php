@@ -55,7 +55,7 @@ class Google_IO_Curl extends Google_IO_Abstract
     }
 
     curl_setopt($curl, CURLOPT_URL, $request->getUrl());
-    
+
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $request->getRequestMethod());
     curl_setopt($curl, CURLOPT_USERAGENT, $request->getUserAgent());
 
@@ -72,8 +72,12 @@ class Google_IO_Curl extends Google_IO_Abstract
       curl_setopt($curl, $key, $var);
     }
 
+    if (!defined("GOOGLE_CLIENT_CAINFO")) {
+      define("GOOGLE_CLIENT_CAINFO", dirname(__FILE__) . '/cacerts.pem');
+    }
+
     if (!isset($this->options[CURLOPT_CAINFO])) {
-      curl_setopt($curl, CURLOPT_CAINFO, dirname(__FILE__) . '/cacerts.pem');
+      curl_setopt($curl, CURLOPT_CAINFO, GOOGLE_CLIENT_CAINFO);
     }
 
     $response = curl_exec($curl);
